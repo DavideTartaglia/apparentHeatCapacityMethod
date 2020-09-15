@@ -1,0 +1,9 @@
+#ifndef MY_CP_LOOP_H
+#define MY_CP_LOOP_H
+
+class cpLoop
+{
+  
+};
+
+#endif

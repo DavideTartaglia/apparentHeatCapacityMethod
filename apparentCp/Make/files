@@ -1,0 +1,3 @@
+apparentCp.C
+
+EXE = $(FOAM_APPBIN)/apparentCp
