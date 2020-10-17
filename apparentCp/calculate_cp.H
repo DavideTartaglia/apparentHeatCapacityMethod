@@ -5,9 +5,14 @@ forAll(mesh.C(),i)
   cp_mean[i]=cp_s.value()-f[i]*(cp_s.value()-cp_l.value());
 }
 
-forAll(mesh.boundary(),i)
+forAll(mesh.boundary(),patchID)
 {
-  cp_mean[i]=cp_s.value()-f[i]*(cp_s.value()-cp_l.value());
+  cp_mean[patchID]=cp_s.value()-f[patchID]*(cp_s.value()-cp_l.value());
+
+  forAll (mesh.boundary()[patchID],facei)
+    {
+      cp_mean.boundaryFieldRef()[patchID][facei] = cp_s.value() - f.boundaryField()[patchID][facei]*(cp_s.value()-cp_l.value());
+    }
 }
 
 
@@ -29,18 +34,35 @@ forAll(mesh.C(),i)
     }
 }
 
-forAll(mesh.boundary(),i)
+
+forAll(mesh.boundary(),patchID)
 {
-  if (f[i]==0)
+  if (f[patchID]==0)
     {
-      cp_app[i] = cp_s.value();
+      cp_app[patchID] = cp_s.value();
     }
-  else if (f[i]>0 && f[i]<1)
+  else if (f[patchID]>0 && f[patchID]<1)
     {
-      cp_app[i] = cp_mean[i] + L.value()/(Tl.value() - Ts.value());
+      cp_app[patchID] = cp_mean[patchID] + L.value()/(Tl.value() - Ts.value());
     }
-  else if (f[i]==1)
+  else if (f[patchID]==1)
     {
-      cp_app[i] = cp_l.value();
+      cp_app[patchID] = cp_l.value();
+    }
+
+  forAll (mesh.boundary()[patchID],facei)
+    {
+  if (f.boundaryField()[patchID][facei]==0)
+    {
+      cp_app.boundaryFieldRef()[patchID][facei] = cp_s.value();
+    }
+  else if (f.boundaryField()[patchID][facei]>0 && f.boundaryField()[patchID][facei]<1)
+    {
+      cp_app.boundaryFieldRef()[patchID][facei] = cp_mean.boundaryField()[patchID][facei] + L.value()/(Tl.value() - Ts.value());
+    }
+  else if (f.boundaryField()[patchID][facei]==1)
+    {
+      cp_app.boundaryFieldRef()[patchID][facei] = cp_l.value();
+    }
     }
 }

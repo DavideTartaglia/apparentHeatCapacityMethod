@@ -53,49 +53,21 @@ int main(int argc, char *argv[])
     {
 
       runTime++;
-      Info<< "Time = " << runTime.timeName() << nl << endl;
+      Info<< "\nTime = " << runTime.timeName() << nl << endl;
  
       // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
+      	  
+      // there's the need to inizialize the surface BC on the patch walls:
+      #include "inizializeBC.H"
+      
       while (pimple.loop())
 	{
-
-	  // while (pimple.correct())
-	  //   {
 	  
-	  if (pimple.firstPimpleIter())
-            {
-	  
-	      Info<< "\nCalculating guess temperature distribution\n" << endl;
-	  
-	      while (pimple.correctNonOrthogonal())
-		{
-		  fvScalarMatrix TEqn
-		    (
-		     fvm::ddt(T) - fvm::laplacian(DT, T)
-		     ==
-		     fvOptions(T)
-		     );
-
-		  fvOptions.constrain(TEqn);
-		  TEqn.solve();
-		  fvOptions.correct(T);	    
-		}
-
-	       #include "calculate_f.H"
-
-               #include "calculate_cp.H"
-
-               #include "calculate_DT.H"
-
-	    }
-
-
 	  Info<< "\nCalculating temperature distribution\n" << endl;
 
 	  fvScalarMatrix TEqn
 		    (
-		     fvm::ddt(T) - fvm::laplacian(DT, T)
+		     fvm::ddt(T) - DT*fvm::laplacian(T)
 		     ==
 		     fvOptions(T)
 		     );
@@ -110,7 +82,6 @@ int main(int argc, char *argv[])
           #include "calculate_cp.H"
 
           #include "calculate_DT.H"
-	  // }
 	  
 	}
       
