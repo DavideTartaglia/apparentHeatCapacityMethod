@@ -1,3 +1,8 @@
+/*
+volScalarField fnew = min( scalar(1), max(scalar(0), (T-Ts)/(Tl-Ts) ) );
+f = fnew ;
+*/
+
 forAll(mesh.C(),i)
 {
   // f[i] = std::min(1,std::max(0,( (T[i] - Ts.value()) / (Tl.value() - Ts.value()) ) ));
