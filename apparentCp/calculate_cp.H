@@ -1,5 +1,10 @@
 Info<< "calculating cp_mean" << endl;
 
+/*
+volScalarField cp_mean_new = cp_s - f*(cp_s - cp_l);
+cp_mean = cp_mean_new;
+*/
+
 forAll(mesh.C(),i)
 {
   cp_mean[i]=cp_s.value()-f[i]*(cp_s.value()-cp_l.value());
@@ -14,7 +19,6 @@ forAll(mesh.boundary(),patchID)
       cp_mean.boundaryFieldRef()[patchID][facei] = cp_s.value() - f.boundaryField()[patchID][facei]*(cp_s.value()-cp_l.value());
     }
 }
-
 
 Info<< "calculating cp_app" << endl;
 

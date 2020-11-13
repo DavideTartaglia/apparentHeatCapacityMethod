@@ -12,7 +12,6 @@ IOdictionary transportProperties
     )
 );
 
-
 Info<< "Reading desity rho\n" << endl;
 
 dimensionedScalar rho
